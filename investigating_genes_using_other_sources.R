@@ -9,6 +9,19 @@
 investigating_genes_using_other_sources.R -h | --help  show this message.
 " -> doc
 
+set.seed(1407)
+
+outfile <- "logs/investigating_genes_using_other_sources.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 opts <- docopt(doc)
 
@@ -79,6 +92,7 @@ if ( !opts$markers_file == "NULL" ) {
 } else if ( !opts$markers_dir == "NULL" ) {
     
     markers_files <- list.files(opts$markers_dir, full.names = T)
+    markers_files <- markers_files[!grepl(pattern = "including_annot_list", x = markers_files)]
     
     for ( m in 1:length(markers_files) ) {
         
@@ -102,10 +116,6 @@ if ( !opts$markers_file == "NULL" ) {
         LCM_func_v5(genes_names = t_genes,
                     plot_name = markers_files_sub)
         
-        print( paste0( "Comparing gene list on the file '", markers_files_sub, "' with the GSE178119 dataset.") )
-        GSE178119_func(genes_names = t_genes,
-                       plot_name = markers_files_sub)
-        
         print( paste0( "Comparing gene list on the file '", markers_files_sub, "' with the SRP028599 dataset.") )
         atlast_v2_SRP028599(genes_names = t_genes,
                             plot_name = markers_files_sub)
@@ -113,9 +123,8 @@ if ( !opts$markers_file == "NULL" ) {
         print( paste0( "Comparing gene list on the file '", markers_files_sub, "' with the SRP212693 dataset.") )
         atlast_v2_SRP212693(genes_names = t_genes,
                             plot_name = markers_files_sub)
-        
-        print( paste0( "Comparing gene list on the file '", markers_files_sub, "' with the SRP058185 dataset.") )
-        atlast_v2_SRP058185(genes_names = t_genes,
-                            plot_name = markers_files_sub)
+
     }
 }
+
+closeAllConnections()
