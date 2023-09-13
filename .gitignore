@@ -3,3 +3,6 @@ data/*
 data_from_other_sources/*
 images/*
 top_1000_markers_per_cluster/*
+rds_files/*
+logs/*
+Rplots.pdf
