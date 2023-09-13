@@ -113,75 +113,7 @@ LCM_func_v5 <- function(genes_names = genes_names,
     
 }
 
-GSE178119_func <- function(genes_names = genes_names,
-                           plot_name = plot_name) {
-    
-    v5_2_v4_sub <- v5_2_v4 %>%
-        dplyr::filter( genes_v5 %in% genes_names ) %>%
-        rename(gene = genes_v4)
-    
-    print( paste ("A total of", nrow(v5_2_v4_sub), "genes IDs, from",
-                  length(genes_names), "had correspondent gene IDs with the genome v.4"))
-    
-    GSE178119_nodules <- suppressMessages( vroom::vroom("data_from_other_sources/GSE178119/GSE178119_nodules_fpkm.txt") )
-    GSE178119_nodules <- GSE178119_nodules %>%
-        dplyr::filter(gene %in% v5_2_v4_sub$gene)
-    
-    GSE178119_ninox <- suppressMessages( vroom::vroom("data_from_other_sources/GSE178119/GSE178119_ninox_fpkm.txt") )
-    GSE178119_ninox <- GSE178119_ninox %>%
-        dplyr::filter(gene %in% v5_2_v4_sub$gene)
-    
-    GSE178119_nodules <- merge(GSE178119_nodules, v5_2_v4_sub, "gene") %>% 
-        mutate(new_name = paste0(genes_v5, " (", gene, ")")) %>%
-        select(-gene, -genes_v5) %>%
-        distinct() %>%
-        column_to_rownames("new_name")
-    
-    GSE178119_ninox <- merge(GSE178119_ninox, v5_2_v4_sub, "gene") %>% 
-        mutate(new_name = paste0(genes_v5, " (", gene, ")")) %>%
-        select(-gene, -genes_v5) %>%
-        distinct() %>%
-        column_to_rownames("new_name")
-    
-    GSE178119_nodules <- t(dynutils::scale_quantile(t(GSE178119_nodules)))
-    GSE178119_ninox <- t(dynutils::scale_quantile(t(GSE178119_ninox)))
-    
-    p_nodules_A17 <- GSE178119_nodules[, c(1:8)]
-    p_nodules_R108 <- GSE178119_nodules[, c(13:16, 9:12)]
-    
-    ( p_nodules_A17 <- suppressMessages( my_complexheatmap(p_nodules_A17, arg_column_title = "") ) )
-    ( p_nodules_R108 <- suppressMessages( my_complexheatmap(p_nodules_R108, arg_column_title = "") ) )
-    
-    ( p_ninox <- suppressMessages( my_complexheatmap(GSE178119_ninox, arg_column_title = "NIN overexpression") ) )
-    
-    (p_nodules <- suppressMessages( ComplexHeatmap::draw(p_nodules_A17 + p_nodules_R108,
-                                                         ht_gap = unit(0.5, "cm") ) ) )
-    
-    png( paste0( opts$out_images, "/",
-                 plot_name, "_",
-                 "GSE178119", "_Feng_2021_nodules.png" ),
-         width = 10,
-         height = 5 + ( 0.2 * nrow(GSE178119_nodules) ),
-         pointsize = 12,
-         res = 300,
-         units = "in")
-    suppressMessages( ComplexHeatmap::draw(p_nodules) )
-    dev.off()
-    
-    png( paste0( opts$out_images, "/",
-                 plot_name, "_",
-                 "GSE178119",
-                 "_Feng_2021_NIN_overexpression.png" ),
-         width = 10,
-         height = 5 + ( 0.2 * nrow(GSE178119_ninox) ),
-         pointsize = 12,
-         res = 300,
-         units = "in")
-    suppressMessages( ComplexHeatmap::draw(p_ninox) )
-    dev.off()
-    
-}
-
+# Generates the heatmaps of the Roux_2014 dataset
 atlast_v2_SRP028599 <- function(genes_names = genes_names,
                                 plot_name = plot_name,
                                 SRP = "SRP028599",
@@ -272,6 +204,7 @@ atlast_v2_SRP028599 <- function(genes_names = genes_names,
     dev.off()
 }
 
+## Schiessl et al., 2019
 atlast_v2_SRP212693 <- function(genes_names = genes_names,
                                 plot_name = plot_name,
                                 SRP = "SRP212693",
@@ -312,46 +245,6 @@ atlast_v2_SRP212693 <- function(genes_names = genes_names,
                  plot_name, "_", 
                  SRP, "_Schiessl_2019_complete.png" ),
          width = (ncol(p_SRP) * 0.25),
-         height = plots_height,
-         pointsize = 12,
-         res = 300, units = "in")
-    ComplexHeatmap::draw(p_SRP)
-    dev.off()
-}
-
-atlast_v2_SRP058185 <- function(genes_names = genes_names,
-                                plot_name = plot_name,
-                                SRP = "SRP058185",
-                                show_names = opts$show_gene_names) {
-    
-    atlas_v2_sub <- atlas_v2 %>%
-        dplyr::filter(locus_tag %in% genes_names) %>%
-        column_to_rownames("locus_tag")
-    
-    print( paste ("A total of", nrow(atlas_v2_sub), "genes IDs, from",
-                  length(genes_names), "had correspondent gene IDs in the dataset"))
-    
-    SRP_complete <- atlas_v2_sub[, grepl( colnames( atlas_v2_sub ), pattern = SRP ) ]
-    
-    SRP_scaled <- t( dynutils::scale_quantile( t(SRP_complete) ) )
-    
-    ( p_SRP <- my_complexheatmap(SRP_scaled,
-                                 arg_column_title = "SRP058185 - Jardinaud et al., 2016.") )
-    
-    if (show_names == TRUE) {
-        
-        plots_height <- 5 + ( 0.2 * nrow(p_SRP) )
-        
-    } else if (show_names == FALSE) {
-        
-        plots_height <- 5 + ( 0.1 * nrow(p_SRP) )
-        
-    }
-    
-    png( paste0( opts$out_images, "/",
-                 plot_name, "_", 
-                 SRP, "_Jardinaud_2016_complete.png" ),
-         width = (ncol(p_SRP) * 0.5),
          height = plots_height,
          pointsize = 12,
          res = 300, units = "in")
