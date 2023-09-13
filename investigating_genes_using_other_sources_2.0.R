@@ -9,6 +9,19 @@
 investigating_genes_using_other_sources.R -h | --help  show this message.
 " -> doc
 
+set.seed(1407)
+
+outfile <- "logs/investigating_genes_using_other_sources_2.0.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 opts <- docopt(doc)
 
@@ -43,6 +56,7 @@ system( paste0("mkdir -p ", opts$out_images) )
 if ( !opts$markers_dir == "NULL" ) {
     
     markers_files <- list.files(opts$markers_dir, full.names = T)
+    markers_files <- markers_files[!grepl(pattern = "including_annot_list", x = markers_files)]
     
     for ( m in 1:length(markers_files) ) {
         print(m)
@@ -102,3 +116,5 @@ if ( !opts$markers_dir == "NULL" ) {
         
     }
 }
+
+closeAllConnections()
