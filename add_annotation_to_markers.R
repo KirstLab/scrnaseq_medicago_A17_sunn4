@@ -3,9 +3,21 @@
 add_annotation_to_markers.R -h | --help  show this message.
 " -> doc
 
+set.seed(1407)
+
+outfile <- "logs/add_annotation_to_markers.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 suppressMessages( require(vroom) )
-set.seed(1407)
 
 opts <- docopt(doc)
 
@@ -13,7 +25,7 @@ folder_containing_markers <- paste0(
     opts$dir,
     "/")
 
-files <- list.files(folder_containing_markers, pattern = "*.csv")
+files <- list.files(folder_containing_markers, pattern = "*.tsv")
 
 annot_names <- vroom::vroom("MtrunA17r5.0-ANR-EGN-r1.9.gene_names.tsv")
 annot_summary <- vroom::vroom("MtrunA17r5.0-ANR-EGN-r1.9.summary.tsv")
@@ -46,3 +58,4 @@ for( i in 1:length( files ) ) {
                 sep = "\t")
     
 }
+closeAllConnections()
