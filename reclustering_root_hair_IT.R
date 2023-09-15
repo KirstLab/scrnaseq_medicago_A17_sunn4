@@ -1,4 +1,16 @@
 set.seed(1407)
+
+outfile <- "logs/reclustering_roothair.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
@@ -19,7 +31,7 @@ folder_name <- "RECLUSTERING/Epidermis_roothair/"
                  cell_size = 0.5,
                  group_label_size = 5) )
 
-cluster_number = c(1, 14, 22, 12)
+cluster_number = c(1, 14, 22, 12, 3)
 
 cells_on_clusters <- cds@clusters$UMAP$clusters
 cells_on_clusters <- cells_on_clusters[cells_on_clusters %in% cluster_number]
@@ -109,11 +121,7 @@ saveRDS(cds_subset,
                "/medicago_integrated_subset_epidermis.rds") )
 
 ## Identification of markers for each cluster
-
-system( paste0("rm -r ",
-               folder_name, 
-               "top_1000_markers_per_cluster") )
-system( paste0("mkdir ",
+system( paste0("mkdir -p ",
                folder_name, 
                "top_1000_markers_per_cluster") )
 
@@ -150,3 +158,5 @@ for (c in unique(marker_test_res$cell_group) ) {
                      ".csv"),
               row.names = F)
 }
+
+closeAllConnections()
