@@ -1,4 +1,16 @@
 set.seed(1407)
+
+outfile <- "logs/reclustering_pericycle.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
@@ -182,3 +194,5 @@ for (c in unique(marker_test_res$cell_group) ) {
                      ".csv"),
               row.names = F)
 }
+
+closeAllConnections()
