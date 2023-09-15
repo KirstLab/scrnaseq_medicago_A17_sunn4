@@ -1,10 +1,10 @@
 set.seed(1407)
 
-outfile <- "logs/hdWGCNA.out" # File name of output log
+outfile <- "hdWGCNA.out" # File name of output log
 #Check its existence
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
-    file.remove(outfile)
+  #Delete file if it exists
+  file.remove(outfile)
 }
 
 my_log <- file(outfile) 
@@ -205,10 +205,11 @@ png(filename = paste0(sample_name, "/hdWGCNA_Dendrogram.png"),
 PlotDendrogram(seurat_obj, main='hdWGCNA Dendrogram')
 dev.off()
 
-svg(filename = paste0(sample_name, "/hdWGCNA_Dendrogram.png"),
+svg(filename = paste0(sample_name, "/hdWGCNA_Dendrogram.svg"),
     height = 10, width = 20, bg = "white")
 PlotDendrogram(seurat_obj, main='hdWGCNA Dendrogram')
 dev.off()
+
 PlotDendrogram(seurat_obj, main='hdWGCNA Dendrogram')
 
 ##########################################
@@ -278,6 +279,8 @@ seurat_obj <- ModuleExprScore(
   seurat_obj,
   n_genes = n_of_hub_genes,
   method='UCell')
+
+
 
 ###########################
 ### Basic Visualization ###
@@ -553,5 +556,9 @@ PlotModuleTraitCorrelation(
 )
 
 dev.off()
+
+## save the network 
+net <- GetTOM(seurat_obj)
+saveRDS(net, "mt_whole_dataset_pearson/network_TOM_file.rds")
 
 closeAllConnections()
