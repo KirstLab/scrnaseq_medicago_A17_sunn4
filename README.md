@@ -223,49 +223,6 @@ Rscript reclustering_pericycle.R
 Rscript add_annotation_to_markers.R --dir RECLUSTERING/PERICYCLE/top_1000_markers_per_cluster/by_specificity
 ```
 
-```sh
-Rscript investigating_genes_using_other_sources.R --out_images RECLUSTERING/PERICYCLE/annotation_using_other_sources_images --markers_dir RECLUSTERING/PERICYCLE/top_1000_markers_per_cluster/by_specificity/ --color_scheme VIRIDIS --show_gene_names FALSE --image_format png
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/PERICYCLE/rds_file_subset/medicago_integrated_subset_pericycle.rds  --markers selected_markers/RNS_genes_curated_list.tsv --out RECLUSTERING/PERICYCLE/annotation_using_markers/RNS_genes_curated_list --common=TRUE
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/PERICYCLE/rds_file_subset/medicago_integrated_subset_pericycle.rds --markers selected_markers/markers_Schiessl_2019_table_s2.csv --out RECLUSTERING/PERICYCLE/annotation_using_markers/markers_Schiessl_2019_table_s2 --common=TRUE
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/PERICYCLE/rds_file_subset/medicago_integrated_subset_pericycle.rds --markers selected_markers/figure_2_roy_et_al_2020.csv --out RECLUSTERING/PERICYCLE/annotation_using_markers/figure_2_roy_et_al_2020 --common=TRUE
-```
- 
-```sh
-mkdir -p RECLUSTERING/PERICYCLE/expression_profiles_top1000/
-i=1
-while [ $i -le 2 ]
-do
-
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/PERICYCLE/rds_file_subset/medicago_integrated_subset_pericycle.rds --markers RECLUSTERING/PERICYCLE/top_1000_markers_per_cluster/by_specificity/list_of_top_1000_for_cluster_${i}_specificity.csv --out RECLUSTERING/PERICYCLE/expression_profiles_top1000/top_1000_for_cluster_${i} --common=FALSE
-
-Rscript visual_inspection_of_markers.R --rds rds_files/batched_integrated_clustered_complete_dataset.rds --markers RECLUSTERING/PERICYCLE/top_1000_markers_per_cluster/by_specificity/list_of_top_1000_for_cluster_${i}_specificity.csv --out RECLUSTERING/PERICYCLE/expression_profiles_top1000/top_1000_for_cluster_${i}_in_the_whole_dataset --common=FALSE
-
-i=$(($i+1))
-done
-```
-
-### Trajectory inference and differential expression within the trajectory -- pericycle
-
-```sh
-Rscript trajectory_inference_pericycle.R
-```
-
-### Number of cells per cluster and timepoint -- pericycle
-
-The script below calculates the number of cells per cluster and time point. The values are shown in cells per thousand, to account for variations in the number of cells due to sampling bias.
-
-```sh
-Rscript number_of_cells_per_cluster_over_time.R --rds RECLUSTERING/PERICYCLE/rds_file_subset/medicago_integrated_subset_pericycle.rds --prefix pericycle
-```
 
 ## Reclustering analysis of the root hair and IT
 
@@ -275,54 +232,6 @@ Rscript reclustering_root_hair_IT.R
 
 ```sh
 Rscript add_annotation_to_markers.R --dir RECLUSTERING/Epidermis_roothair/top_1000_markers_per_cluster/by_specificity
-```
-
-```sh
-Rscript investigating_genes_using_other_sources.R --out_images RECLUSTERING/Epidermis_roothair/annotation_using_other_sources_images --markers_dir RECLUSTERING/Epidermis_roothair/top_1000_markers_per_cluster/by_specificity/ --color_scheme VIRIDIS --show_gene_names FALSE --image_format png
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds  --markers selected_markers/RNS_genes_curated_list.tsv --out RECLUSTERING/Epidermis_roothair/annotation_using_markers/RNS_genes_curated_list --common=TRUE
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds --markers selected_markers/all_NCRs_medicago.csv --out RECLUSTERING/Epidermis_roothair/annotation_using_markers/all_NCRs_medicago --common=FALSE
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds --markers selected_markers/markers_Schiessl_2019_table_s2.csv --out RECLUSTERING/Epidermis_roothair/annotation_using_markers/markers_Schiessl_2019_table_s2 --common=TRUE
-```
-
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds --markers selected_markers/figure_2_roy_et_al_2020.csv --out RECLUSTERING/Epidermis_roothair/annotation_using_markers/figure_2_roy_et_al_2020 --common=TRUE
-```
-
-```sh
-mkdir -p RECLUSTERING/Epidermis_roothair/expression_profiles_top1000/
-i=1
-while [ $i -le 12 ]
-do
-
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds --markers RECLUSTERING/Epidermis_roothair/top_1000_markers_per_cluster/by_specificity/list_of_top_1000_for_cluster_${i}_specificity.csv --out RECLUSTERING/Epidermis_roothair/expression_profiles_top1000/top_1000_for_cluster_${i} --common=FALSE
-
-Rscript visual_inspection_of_markers.R --rds rds_files/batched_integrated_clustered_complete_dataset.rds --markers RECLUSTERING/Epidermis_roothair/top_1000_markers_per_cluster/by_specificity/list_of_top_1000_for_cluster_${i}_specificity.csv --out RECLUSTERING/Epidermis_roothair/expression_profiles_top1000/top_1000_for_cluster_${i}_in_the_whole_dataset --common=FALSE
-
-i=$(($i+1))
-done
-```
-
-### Trajectory inference on the reclustered dataset
-
-```sh
-Rscript trajectory_inference_root_hair_IT.R
-```
-
-### Number of cells per cluster and timepoint -- root hair/IT
-
-The script below calculates the number of cells per cluster and time point. The values are shown in cells per thousand, to account for variations in the number of cells due to sampling bias.
-
-```sh
-Rscript number_of_cells_per_cluster_over_time.R --rds RECLUSTERING/Epidermis_roothair/rds_file_subset/medicago_integrated_subset_epidermis.rds --prefix roothair_IT
 ```
 
 ## Reclustering analysis of cortex and nodule cells (sunn-4)
@@ -355,9 +264,6 @@ Rscript visual_inspection_of_markers.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_f
 Rscript visual_inspection_of_markers.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_subset_cortex_nodule.rds --markers selected_markers/GusGenes.csv --out RECLUSTERING/CORTEX_NOD_sunn4/annotation_using_markers/GusGenes --common=FALSE
 ```
 
-```sh
-Rscript visual_inspection_of_markers.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_subset_cortex_nodule.rds --markers selected_markers/all_NCRs_medicago.tsv --out RECLUSTERING/CORTEX_NOD_sunn4/annotation_using_markers/all_NCRs --common=TRUE
-```
 
 ```sh
 mkdir -p RECLUSTERING/CORTEX_NOD_sunn4/expression_profiles_top1000/
