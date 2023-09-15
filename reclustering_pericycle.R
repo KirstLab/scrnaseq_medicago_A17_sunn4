@@ -45,15 +45,38 @@ ggplot2::ggsave(filename = paste0(folder_name,
                 bg = "#FFFFFF", 
                 dpi = 300)
 
+## Differential expression within C8 over time
+
+## Fits the regression
+gene_fits <- fit_models(cds_subset,
+                        model_formula_str = "~timepoint + 0",
+                        cores = 7)
+
+fit_coefs <- coefficient_table(gene_fits)
+
+RH_terms_sig <- fit_coefs %>%
+    filter(q_value < 0.05) %>%
+    filter(status == "OK") %>%
+    group_by(term) %>%
+    select(gene_short_name, term, q_value, estimate) %>%
+    arrange( desc( term ), desc( estimate ) )
+
+write.table(RH_terms_sig, 
+            "DEGs_linear_regression_pericycle_C8_over_time_point.tsv",
+            col.names = T,
+            row.names = T,
+            sep = "\t",
+            quote = T)
+
 # Reclustering
 cds_subset <- clear_cds_slots(cds_subset)
-
 cds_subset <- monocle3::preprocess_cds(cds_subset, num_dim = 100, verbose = T)
 
 cds_subset <- reduce_dimension(cds_subset, verbose = T)
 
 cds_subset <- cluster_cells(cds_subset,
-                            verbose = T, 
+                            verbose = T,
+                            resolution = 0.001,
                             random_seed = 1407)
 
 ( p2 <- plot_cells(cds_subset, 
@@ -61,9 +84,8 @@ cds_subset <- cluster_cells(cds_subset,
                    cell_size = 0.75) )
 
 ( p3 <- plot_cells(cds_subset,
-                   group_label_size = 5,
-                   trajectory_graph_segment_size = 1.5,
-                   graph_label_size = 5,
+                   group_label_size = 7,
+                   graph_label_size = 7,
                    cell_size = 0.5)  +
         facet_wrap(~Group + timepoint, nrow = 2) +
         theme(strip.text = element_blank(),
@@ -121,7 +143,6 @@ saveRDS(cds_subset,
                "/medicago_integrated_subset_pericycle.rds") )
 
 ## Identification of markers for each cluster
-
 system( paste0("mkdir -p ",
                folder_name, 
                "top_1000_markers_per_cluster") )
