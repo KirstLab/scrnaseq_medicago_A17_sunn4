@@ -6,16 +6,25 @@
 visual_inspection_of_markers.R -h | --help  show this message.
 " -> doc
 
+set.seed(1407)
+
+outfile <- "logs/visual_inspection_of_markers.out" # File name of output log
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 opts <- docopt(doc)
 
-set.seed(1407)
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
 suppressMessages( require(ggplot2) )
 suppressMessages( require(dplyr) )
 suppressMessages( require(stringr) )
+
+save.image("tes.rda")
 
 cds <- readRDS(opts$rds)
 
@@ -126,3 +135,5 @@ for( m in 1:nrow(top_specific_marker_ids) ) {
                     dpi = 300,
                     bg = "#FFFFFF")
 }
+
+closeAllConnections()
