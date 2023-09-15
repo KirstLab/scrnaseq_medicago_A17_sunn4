@@ -6,3 +6,5 @@ top_1000_markers_per_cluster/*
 rds_files/*
 logs/*
 Rplots.pdf
+RECLUSTERING/*
+mt_whole_dataset_pearson/*
