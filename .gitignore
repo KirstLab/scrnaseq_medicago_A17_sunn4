@@ -8,3 +8,9 @@ logs/*
 Rplots.pdf
 RECLUSTERING/*
 mt_whole_dataset_pearson/*
+.Rhistory
+*.tsv
+*.out
+*.rda
+*.png
+*.svg
