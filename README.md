@@ -201,7 +201,11 @@ Nothe that the output list can also be used as input to CytoScape to visualizati
 ## RNA velocity
 
 ```sh
-
+bash velocyto.sh
+python combining_loom_files_with_loompy.py
+Rscript running_velocyto_using_monocle_whole_data.R
+Rscript seurat_to_anndata_after_velocyto_whole_dataset.R
+python sc_velo_seurat_obj_whole_dataset_dynamical_model.py
 ```
 
 <!-- ### Expression profile of key markers using heatmap -- whole dataset
@@ -264,7 +268,6 @@ Rscript visual_inspection_of_markers.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_f
 Rscript visual_inspection_of_markers.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_subset_cortex_nodule.rds --markers selected_markers/GusGenes.csv --out RECLUSTERING/CORTEX_NOD_sunn4/annotation_using_markers/GusGenes --common=FALSE
 ```
 
-
 ```sh
 mkdir -p RECLUSTERING/CORTEX_NOD_sunn4/expression_profiles_top1000/
 i=1
@@ -285,13 +288,18 @@ done
 Rscript trajectory_inference_cortex_nodule.R
 ```
 
-### Number of cells per cluster and timepoint -- cortex/nodule
 
-The script below calculates the number of cells per cluster and time point. The values are shown in cells per thousand, to account for variations in the number of cells due to sampling bias.
 
-```sh
-Rscript number_of_cells_per_cluster_over_time.R --rds RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_subset_cortex_nodule.rds --prefix cortex_nodule
-```
+
+
+
+
+
+
+
+
+
+
 
 ## Additional analysis
 
