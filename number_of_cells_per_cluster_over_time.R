@@ -5,6 +5,18 @@ number_of_cells_per_cluster_over_time.R -h | --help  show this message.
 " -> doc
 
 set.seed(1407)
+
+outfile <- "logs/number_of_cells_per_cluster_over_time.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 suppressMessages( require(tidyverse) )
 suppressMessages( require(monocle3) )
@@ -19,14 +31,14 @@ counts_per_cluster <- cds_meta %>%
     dplyr::count(cluster, Group, timepoint)
 
 write_excel_csv(counts_per_cluster,
-                file = paste( opts$prefix,
+                file = paste0( opts$prefix, "/",
                               "raw_number_of_cells_per_cluster_by_genotype_and_timepoint.csv") )
 
 counts_per_group <- cds_meta %>% 
     dplyr::count(Group, timepoint)
 
 write_excel_csv(counts_per_cluster, 
-                file = paste( opts$prefix,
+                file = paste0( opts$prefix, "/",
                               "raw_number_of_cells_per_genotype_by_timepoint.csv") )
 
 p <- ggplot(data=counts_per_cluster,
@@ -45,7 +57,7 @@ p <- ggplot(data=counts_per_cluster,
 
 ggplot2::ggsave( 
     paste0("images/", 
-           opts$prefix,
+           opts$prefix,"/",
            "_raw_number_of_cells_per_clusters.png"),
     p,
     height=40,
@@ -56,7 +68,7 @@ ggplot2::ggsave(
 
 ggplot2::ggsave(    
     paste0("images/", 
-           opts$prefix,
+           opts$prefix,"/",
            "_raw_number_of_cells_per_clusters.svg"),
     p,
     height=40,
@@ -82,7 +94,7 @@ p <- ggplot(data=counts_per_cluster,
 
 ggplot2::ggsave(    
     paste0("images/", 
-           opts$prefix,
+           opts$prefix,"/",
            "_raw_number_of_cells_per_clusters_fixed_scale.png"),
     p,
     height=40,
@@ -93,7 +105,7 @@ ggplot2::ggsave(
 
 ggplot2::ggsave(
     paste0("images/", 
-           opts$prefix,
+           opts$prefix,"/",
            "_raw_number_of_cells_per_clusters_fixed_scale.svg"),
     p,
     height=40,
@@ -108,7 +120,7 @@ counts_per_cluster_wide <- cds_meta %>%
                        values_from = n) 
 
 write.table(counts_per_cluster_wide,
-            paste0(opts$prefix,
+            paste0(opts$prefix,"/",
                    "_raw_cells_per_cluster_integrated_29_C_cds_clustered.csv"),
             col.names = T,
             row.names = F,
@@ -154,11 +166,11 @@ counts_per_cluster <- rbind(sunn4, WT) %>%
 counts_per_cluster$CT <- as.numeric(counts_per_cluster$CT)
 
 write_excel_csv(counts_per_cluster,
-                file = paste( opts$prefix,
+                file = paste0( opts$prefix, "/",
                               "number_of_cells_per_cluster_by_genotype_and_timepoint_including_CT.csv") )
 
 write_excel_csv(counts_per_cluster,
-                file = paste( opts$prefix,
+                file = paste0( opts$prefix, "/",
                               "raw_number_of_cells_per_cluster_by_genotype_and_timepoint.csv") )
 
 p <- ggplot(data = counts_per_cluster,
@@ -181,7 +193,7 @@ p
 
 ggplot2::ggsave(
     paste0("images/",
-           opts$prefix,
+           opts$prefix, "/",
            "_CT_number_of_cells_per_clusters.png"),
     p,
     height=40,
@@ -192,7 +204,7 @@ ggplot2::ggsave(
 
 ggplot2::ggsave(
     paste0("images/",
-           opts$prefix,
+           opts$prefix, "/",
            "_CT_number_of_cells_per_clusters.svg"),
     p,
     height=40,
@@ -200,3 +212,5 @@ ggplot2::ggsave(
     units="cm",
     dpi = 300,
     bg = "#FFFFFF")
+
+closeAllConnections()
