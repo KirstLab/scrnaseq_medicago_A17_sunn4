@@ -1,4 +1,16 @@
 set.seed(1407)
+
+outfile <- "logs/generates_the_heatmap_containing_gene_markers_for_figure1.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile)
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(ComplexHeatmap) )
 suppressMessages( require(ggplot2) )
 suppressMessages( require(dplyr) )
@@ -105,3 +117,4 @@ ggplot2::ggsave("images/heatmap_of_selected_markers_for_cluster_annotation.svg",
                 units = "cm",
                 dpi = 300,
                 bg = "#FFFFFF")
+closeAllConnections()
