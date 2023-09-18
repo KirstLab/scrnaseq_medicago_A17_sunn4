@@ -14,3 +14,4 @@ mt_whole_dataset_pearson/*
 *.rda
 *.png
 *.svg
+velocity/*
