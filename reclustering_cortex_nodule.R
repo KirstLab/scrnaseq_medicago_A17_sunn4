@@ -1,4 +1,16 @@
 set.seed(1407)
+
+outfile <- "logs/reclustering_cortex_nodule.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile) 
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
@@ -12,12 +24,13 @@ suppressMessages( require(stringr) )
 cds <- readRDS("rds_files/batched_integrated_clustered_complete_dataset.rds")
 
 # Where to save the results
-folder_name <- "RECLUSTERING/CORTEX_NOD_sunn4/"
+folder_name <- "RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/"
 
 ( p0 <- plot_cells(cds,
                    color_cells_by="cluster",
                    cell_size = 0.5,
-                   group_label_size = 5) )
+                   group_label_size = 5)  +
+    facet_wrap(~timepoint) )
 
 colData(cds)$cluster <- monocle3::clusters(cds)
 
@@ -44,13 +57,13 @@ cells_on_sunn_names <- unique(rownames(cells_on_sunn))
 cds_subset <- cds_subset[, colnames(cds_subset) %in% cells_on_sunn_names ]
 
 ( p1_sunn4 <- plot_cells(cds_subset,
-                   cell_size = 0.75,
-                   group_label_size = 8) )
+                         cell_size = 0.75,
+                         group_label_size = 8) )
 
 ( p1.1 <- plot_cells(cds_subset,
                      cell_size = 0.75,
                      group_label_size = 8)  +
-    facet_wrap(~Group + timepoint, nrow = 1) )
+        facet_wrap(~Group + timepoint, nrow = 1) )
 
 system( paste0( "mkdir -p ", folder_name, "clustering_images") )
 ggplot2::ggsave(filename = paste0(folder_name,
@@ -93,18 +106,18 @@ ggplot2::ggsave(filename = paste0(folder_name,
                 bg = "#FFFFFF", 
                 dpi = 300)
 
-system("mkdir -p RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/")
-saveRDS(cds_subset, file = "RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_selected_clusters_cortex_nodule.rds")
+system("mkdir -p RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/rds_file_subset/")
+saveRDS(cds_subset, file = "RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/rds_file_subset/medicago_integrated_selected_clusters_cortex_nodule.rds")
 
 ## Removes cells from lateral root meristem
 #cds_subset <- monocle3::choose_cells(cds_subset)
 #cells_to_exclude <- as.data.frame( rownames(colData(cds_subset)) )
 #write.table(cells_to_exclude,
-#            "cells_to_exclude.tsv",
+#            "RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/cells_to_exclude.tsv",
 #            col.names = F, row.names = F, quote = F, sep = "\t")
 
 cells_to_exclude <- vroom::vroom(
-    "cells_to_exclude.tsv",
+    "RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/cells_to_exclude.tsv",
     col_names = F,
     delim = "\t")
 
@@ -127,7 +140,7 @@ ggplot2::ggsave(filename = paste0(folder_name,
 ( p1.1 <- plot_cells(cds_subset,
                      cell_size = 0.75,
                      group_label_size = 8)  +
-    facet_wrap(~Group + timepoint, nrow = 1) )
+        facet_wrap(~Group + timepoint, nrow = 1) )
 
 ggplot2::ggsave(filename = paste0(folder_name,
                                   "clustering_images",
@@ -140,7 +153,7 @@ ggplot2::ggsave(filename = paste0(folder_name,
                 dpi = 300)
 
 
-saveRDS(cds_subset, file = "RECLUSTERING/CORTEX_NOD_sunn4/rds_file_subset/medicago_integrated_selected_clusters_cortex_nodule_after_removing_LR.rds")
+saveRDS(cds_subset, file = "RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/rds_file_subset/medicago_integrated_selected_clusters_cortex_nodule_after_removing_LR.rds")
 
 ggplot2::ggsave(filename = paste0(folder_name,
                                   "clustering_images",
@@ -224,10 +237,10 @@ ggplot2::ggsave(
     dpi = 300)
 
 ( p3.1 <- plot_cells(cds_subset,
-                   group_label_size = 5,
-                   trajectory_graph_segment_size = 1.5,
-                   graph_label_size = 5,
-                   cell_size = 0.75)  +
+                     group_label_size = 5,
+                     trajectory_graph_segment_size = 1.5,
+                     graph_label_size = 5,
+                     cell_size = 0.75)  +
         facet_wrap(~ timepoint, nrow = 1) +
         theme(strip.text = element_blank(),
               axis.title = element_text(size = 16),
@@ -315,3 +328,5 @@ for (c in unique(marker_test_res$cell_group) ) {
                      ".csv"),
               row.names = F)
 }
+
+closeAllConnections()
