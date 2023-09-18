@@ -1,4 +1,16 @@
 set.seed(1407)
+
+outfile <- "logs/umap_colored_by_cell_type.out" # File name of output log
+#Check its existence
+if ( file.exists(outfile) ) {
+    #Delete file if it exists
+    file.remove(outfile)
+}
+
+my_log <- file(outfile)
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 require(monocle3)
 require(ggplot2)
 
@@ -135,29 +147,4 @@ ggplot2::ggsave(filename = "images/clustered_dataset_clusters_for_figure1.svg",
                 units="cm",
                 bg = "#FFFFFF")
 
-( p3 <- plot_cells(cds,
-                   genes = "MtrunA17Chr3g0136151",
-                   cell_size = 0.4,
-                   scale_to_range = F,
-                   label_cell_groups = F) +
-        viridis::scale_color_viridis(option = "A") +
-        theme(legend.title = element_blank(),
-              legend.text = element_text(size = 14) ) +
-        theme(strip.text = element_text(size = 14),
-              plot.title = element_text(size=20,
-                                        face = "bold"),
-              legend.position="none") )
-
-ggplot2::ggsave(filename = "images/clustered_dataset_expression_of_validated_pericycle_marker.svg",
-                p3,
-                height=10,
-                width=15,
-                units="cm",
-                bg = "#FFFFFF")
-
-ggplot2::ggsave(filename = "images/clustered_dataset_expression_of_validated_pericycle_marker.png",
-                p3,
-                height=10,
-                width=15,
-                units="cm",
-                bg = "#FFFFFF")
+closeAllConnections()
