@@ -8,7 +8,7 @@ visual_inspection_of_markers.R -h | --help  show this message.
 
 set.seed(1407)
 
-outfile <- "logs/visual_inspection_of_markers.out" # File name of output log
+outfile <- "logs/visual_inspection_of_markers.out"
 
 my_log <- file(outfile) 
 sink(my_log, append = TRUE, type = "output")
@@ -24,8 +24,6 @@ suppressMessages( require(ggplot2) )
 suppressMessages( require(dplyr) )
 suppressMessages( require(stringr) )
 
-save.image("tes.rda")
-
 cds <- readRDS(opts$rds)
 
 ( pc <- plot_cells(cds,
@@ -36,8 +34,10 @@ cds <- readRDS(opts$rds)
 ext <- tools::file_ext(opts$markers)
 
 top_specific_marker_ids_df <- switch(ext,
-                                     csv = vroom::vroom(opts$markers, delim = ","),
-                                     tsv = vroom::vroom(opts$markers, delim = "\t"),
+                                     csv = vroom::vroom(
+                                         opts$markers, delim = ","),
+                                     tsv = vroom::vroom(
+                                         opts$markers, delim = "\t"),
                                      validate("Invalid file; Please upload a .csv or .tsv file") )
 
 top_specific_marker_ids_df <- top_specific_marker_ids_df[complete.cases(top_specific_marker_ids_df[, 1]), ]
