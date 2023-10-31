@@ -1,9 +1,7 @@
 set.seed(1407)
 
-outfile <- "logs/combining_all_samples_and_clustering.out" # File name of output log
-#Check its existence
+outfile <- "logs/combining_all_samples_and_clustering.out"
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
@@ -17,19 +15,18 @@ suppressMessages( require(cowplot) )
 suppressMessages( require(ggplot2) )
 suppressMessages( require(dplyr) )
 
-threads <- as.numeric(8)
-umi_theshold <- as.numeric(400)
+threads <- as.numeric(7)
 
 ## A17 WT
-cds_0h <- readRDS("rds_files/cds_A17_0h_after_scDblFinder.rds")
-cds_24h <- readRDS("rds_files/cds_A17_24h_after_scDblFinder.rds")
-cds_48h <- readRDS("rds_files/cds_A17_48h_after_scDblFinder.rds")
-cds_96h <- readRDS("rds_files/cds_A17_96h_after_scDblFinder.rds")
+cds_0h <- readRDS("rds_files/A17_0h_after_scDblFinder.rds")
+cds_24h <- readRDS("rds_files/A17_24h_after_scDblFinder.rds")
+cds_48h <- readRDS("rds_files/A17_48h_after_scDblFinder.rds")
+cds_96h <- readRDS("rds_files/A17_96h_after_scDblFinder.rds")
 ## sunn-4
-cds_sunn_0h <- readRDS("rds_files/cds_sunn_0h_after_scDblFinder.rds")
-cds_sunn_24h <- readRDS("rds_files/cds_sunn_24h_after_scDblFinder.rds")
-cds_sunn_48h <- readRDS("rds_files/cds_sunn_48h_after_scDblFinder.rds")
-cds_sunn_96h <- readRDS("rds_files/cds_sunn_96h_after_scDblFinder.rds")
+cds_sunn_0h <- readRDS("rds_files/sunn_0h_after_scDblFinder.rds")
+cds_sunn_24h <- readRDS("rds_files/sunn_24h_after_scDblFinder.rds")
+cds_sunn_48h <- readRDS("rds_files/sunn_48h_after_scDblFinder.rds")
+cds_sunn_96h <- readRDS("rds_files/sunn_96h_after_scDblFinder.rds")
 
 colData(cds_0h)$timepoint <- "0h"
 colData(cds_24h)$timepoint <- "24h"
@@ -79,30 +76,61 @@ rm(cds_0h,
 ################
 ## Clustering ##
 ################
-
+umi_theshold = 400
 cds <- monocle3::preprocess_cds(cds, num_dim = 100)
-monocle3::plot_pc_variance_explained(cds)
 cds <- reduce_dimension(cds, verbose = T)
+
+print("Dimentions of the dataset BEFORE removing the doublets")
+dim(colData(cds))
+( pdoub <- plot_cells(cds,
+                      color_cells_by="scDblFinder",
+                      label_cell_groups=FALSE) + facet_wrap(~scDblFinder) )
+
+ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI_singlet_vs_doublet.png"),
+                pdoub,
+                height=20,
+                width=30,
+                units="cm",
+                bg = "#FFFFFF")
+
+ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI_singlet_vs_doublet.svg"),
+                pdoub,
+                height=20,
+                width=30,
+                units="cm",
+                bg = "#FFFFFF")
+
+doublets <- cds@colData
+doublets <- doublets[doublets$scDblFinder == "doublet", ]
+cells_that_are_doublets <- unique(rownames(doublets))
+
+cds <- cds[, !colnames(cds) %in% cells_that_are_doublets ]
+
+( plot_cells(cds,
+             color_cells_by="scDblFinder",
+             label_cell_groups=FALSE) )
+
+print("Dimentions of the dataset AFTER removing the doublets")
+dim(colData(cds))
 
 ( p1 <- monocle3::plot_cells(cds,
                              color_cells_by="batch2",
                              label_cell_groups=FALSE) )
 
-# removes possible batch effects
 cds <- align_cds(cds,
                  num_dim = 100,
                  alignment_group = "batch2",
                  verbose = T)
 
 cds <- reduce_dimension(cds, verbose = T)
-
 ( p2 <- plot_cells(cds,
                    color_cells_by="batch2",
                    label_cell_groups=FALSE) )
 
 ( p_time <- plot_cells(cds,
                        color_cells_by="timepoint",
-                       label_cell_groups=FALSE) )
+                       label_cell_groups=FALSE) +
+        facet_wrap(~timepoint))
 
 ggplot2::ggsave(filename = paste0("images/cells_distributed_by_timepoint_",
                                   umi_theshold, "_UMI.png"),
@@ -130,59 +158,18 @@ cds <- cluster_cells( cds,
 
 rowData(cds)$gene_short_name <- row.names(rowData(cds))
 
-( p5.1 <- plot_cells(cds,
-                     group_label_size = 11,
-                     cell_size = 0.75,
-                     alpha = 0.7) )
-
-print("Dimentions of the dataset BEFORE removing the doublets")
-dim(colData(cds))
-( pdoub <- plot_cells(cds,
-                      color_cells_by="scDblFinder",
-                      label_cell_groups=FALSE) + facet_wrap(~scDblFinder) )
-
-ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI_singlet_vs_doublet.png"),
-                pdoub,
-                height=20,
-                width=30,
-                units="cm",
-                bg = "#FFFFFF")
-
-ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI_singlet_vs_doublet.svg"),
-                pdoub,
-                height=20,
-                width=30,
-                units="cm",
-                bg = "#FFFFFF")
-
-
-## Remove doublets
-doublets <- cds@colData
-doublets <- doublets[doublets$scDblFinder == "doublet", ]
-cells_that_are_doublets <- unique(rownames(doublets))
-
-cds <- cds[, !colnames(cds) %in% cells_that_are_doublets ]
-
-( p5.2 <- plot_cells(cds,
-                     group_label_size = 11,
-                     cell_size = 0.75,
-                     alpha = 0.7) )
-
-print("Dimentions of the dataset AFTER removing the doublets")
-dim(colData(cds))
-plot_cells(cds,
-           color_cells_by="scDblFinder",
-           label_cell_groups=FALSE)
-
-( p5 <- cowplot::plot_grid(p5.1, p5.2) )
+( p5 <- plot_cells(cds,
+                   group_label_size = 8,
+                   cell_size = 0.75,
+                   alpha = 0.7) )
 
 saveRDS( cds,
          paste0("rds_files/", "batched_integrated_clustered_complete_dataset.rds") )
 
-ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI.png"),
+ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_UMI.png") ,
                 p5,
-                height=20,
-                width=30,
+                height=10,
+                width=10,
                 units="cm",
                 bg = "#FFFFFF")
 
@@ -193,7 +180,7 @@ ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_U
                 units="cm",
                 bg = "#FFFFFF")
 
-( p8 <- plot_cells(cds,
+( p6 <- plot_cells(cds,
                    group_label_size = 4,
                    cell_size = 0.5, 
                    alpha = 0.6) + 
@@ -203,13 +190,13 @@ ggplot2::ggsave(filename = paste0("images/clustered_dataset_", umi_theshold, "_U
 ggplot2::ggsave(filename = paste0("images/clusteres_by_time_",
                                   umi_theshold,
                                   "_UMI.png"),
-                p8,
+                p6,
                 height=10,
                 width=50,
                 units="cm",
                 bg = "#FFFFFF")
 
-( p9 <- plot_cells(cds,
+( p7 <- plot_cells(cds,
                    group_label_size = 4,
                    cell_size = 0.5, 
                    alpha = 0.6) + 
@@ -219,7 +206,7 @@ ggplot2::ggsave(filename = paste0("images/clusteres_by_time_",
 ggplot2::ggsave(filename = paste0("images/clusteres_by_time_and_genotype",
                                   umi_theshold,
                                   "_UMI.png"),
-                p9,
+                p7,
                 height=22,
                 width=50,
                 units="cm",
@@ -229,7 +216,7 @@ ggplot2::ggsave(filename = paste0("images/clusteres_by_time_and_genotype",
 ggplot2::ggsave(filename = paste0("images/clusteres_by_time_and_genotype",
                                   umi_theshold,
                                   "_UMI.svg"),
-                p9,
+                p7,
                 height=22,
                 width=50,
                 units="cm",
