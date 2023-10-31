@@ -1,4 +1,5 @@
-"Usage: investigating_genes_using_other_sources.R (--out_images <out_imag>) [--markers_file <markers_file>] [--markers_dir <markers_dir>] [--color_scheme=<color_scheme>] [--plot_name <p_name>] [--show_gene_names=<gene_names>] [--image_format=<img_f>]
+"Usage: investigating_genes_using_other_sources.R (--rds <rds>) (--out_images <out_imag>) [--markers_file <markers_file>] [--markers_dir <markers_dir>] [--color_scheme=<color_scheme>] [--plot_name <p_name>] [--show_gene_names=<gene_names>] [--image_format=<img_f>]
+--rds   rds file
 --out_images <out_imag> Output directory where the images will be saved.
 --markers_file <markers_file>   File containing the list of markers to be used, must be in the csv format and have the gene IDs in the first column. Use EITHER \"--markers_file\" OR \"--markers_dir\" [default: NULL].
 --markers_dir <markers_dir> Folder containing the files that should be processed. Each file must be in the csv format and have the gene IDs in the first column. Use EITHER \"--markers_file\" OR \"--markers_dir\" [default: NULL].
@@ -11,10 +12,9 @@ investigating_genes_using_other_sources.R -h | --help  show this message.
 
 set.seed(1407)
 
-outfile <- "logs/investigating_genes_using_other_sources_2.0.out" # File name of output log
-#Check its existence
+outfile <- "logs/investigating_genes_using_other_sources_2.0.out"
+
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
@@ -79,31 +79,16 @@ if ( !opts$markers_dir == "NULL" ) {
         
         LCM_func_v5(genes_names = t_genes,
                     plot_name = markers_files_sub)
+
+        c_order <- 1:24
         
-        c_order = c(
-            1, 3, 14, 22, # Epidermis / Root hair
-            12, # Root hair
-            15, 29, # Lateral root
-            26, # Xylem
-            10, 23, # Stele
-            18, # Cell division vasculature
-            8, # Pericycle
-            7, 24, # Endodermis
-            2, 4, 9, 11, 13, 16, # Cortex
-            6, # Nodule
-            5, # NA
-            17, #NA
-            19, 20, 21, #NA 
-            25, # NA
-            27, 28 # NA
-        )
-        
-        cds_path = "rds_files/batched_integrated_clustered_complete_dataset.rds"
+        cds_path = opts$rds
         
         sc_cluster( genes_names = t_genes,
                     plot_name = markers_files_sub,
                     cds_path = cds_path,
-                    c_order = c_order)
+                    c_order = c_order
+                    )
         
         print( paste0( "Comparing gene list on the file '", markers_files_sub, "' with the SRP028599 dataset.") )
         atlast_v2_SRP028599(genes_names = t_genes,
