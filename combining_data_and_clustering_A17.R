@@ -1,15 +1,24 @@
-"Usage: step1_integrating_data_and_clustering_A17_only.R (--cores <cores>) (--UMI <umi>) (--out=<out>)
+"Usage: combining_data_and_clustering_A17.R (--cores <cores>) (--UMI <umi>) (--out=<out>)
 --cores=<cores> Number of cores [default:4].
 --UMI <umi> Minimim UMI for a cell to be included [default:400].
 --out=<out> Output prefix to the rds files [default:cds].
-step1_integrating_data_and_clustering_A17_only.R -h | --help  show this message.
+combining_data_and_clustering_A17.R -h | --help  show this message.
 " -> doc
 
-# retrieves the command-line arguments
+set.seed(1407)
+
+outfile <- "logs/combining_data_and_clustering_A17.out"
+if ( file.exists(outfile) ) {
+    file.remove(outfile)
+}
+
+my_log <- file(outfile)
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 opts <- docopt(doc)
 
-set.seed(1407)
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
@@ -22,16 +31,12 @@ suppressMessages( require(dplyr) )
 threads <- as.numeric( opts$cores )
 umi_theshold = as.numeric( opts$UMI )
 
-cds_0h <- monocle3::load_cellranger_data("data/A17_sep_2022_0h_10k/",
-                                         umi_cutoff = umi_theshold)
-cds_24h <- monocle3::load_cellranger_data("data/A17_sep_2022_24h_10k/",
-                                          umi_cutoff = umi_theshold)
-cds_48h <- monocle3::load_cellranger_data("data/A17_sep_2022_48h_10k/",
-                                          umi_cutoff = umi_theshold)
-cds_96h <- monocle3::load_cellranger_data("data/A17_sep_2022_96h_10k/",
-                                          umi_cutoff = umi_theshold)
+## A17 WT
+cds_0h <- readRDS("rds_files/A17_0h_after_scDblFinder.rds")
+cds_24h <- readRDS("rds_files/A17_24h_after_scDblFinder.rds")
+cds_48h <- readRDS("rds_files/A17_48h_after_scDblFinder.rds")
+cds_96h <- readRDS("rds_files/A17_96h_after_scDblFinder.rds")
 
-## Adds the design info for the plots and comparisons
 colData(cds_0h)$timepoint <- "0h"
 colData(cds_24h)$timepoint <- "24h"
 colData(cds_48h)$timepoint <- "48h"
@@ -71,7 +76,6 @@ cds <- reduce_dimension(cds, verbose = T)
                              color_cells_by="batch2",
                              label_cell_groups=FALSE) )
 
-# removes pottential batch effect
 cds_batched = align_cds(cds,
                         num_dim = 100,
                         alignment_group = "batch2")
@@ -146,3 +150,5 @@ ggplot2::ggsave(filename = paste0("images/clusteres_by_time_and_genotype",
                 width=50,
                 units="cm",
                 bg = "#FFFFFF")
+
+closeAllConnections()
