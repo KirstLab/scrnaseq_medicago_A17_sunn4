@@ -1,9 +1,8 @@
 set.seed(1407)
 
-outfile <- "logs/generates_the_heatmap_containing_gene_markers_for_figure1.out" # File name of output log
-#Check its existence
+outfile <- "logs/generates_the_heatmap_containing_gene_markers_for_figure1.out"
+
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
@@ -21,9 +20,7 @@ suppressMessages( require(tidyverse) )
 suppressMessages( require(vroom) )
 suppressMessages( require(viridis) )
 suppressMessages( require(docopt) )
-suppressMessages( require(vroom) )
-suppressMessages( require(tidyverse) )
-suppressMessages( require(monocle3) )
+suppressMessages( require(Seurat) )
 
 my_pheatmap <- function(marker_ids = markers,
                         c_order = NULL) {
@@ -34,7 +31,6 @@ my_pheatmap <- function(marker_ids = markers,
     agg_mat <- aggregate_gene_expression(cds, NULL, cell_group_df)
     agg_mat2 <- agg_mat[rownames(agg_mat) %in% marker_ids$gene_id, ]
     
-    # To keep the order of the input genes
     agg_mat2 <- agg_mat2[ order( match( rownames(agg_mat2),  marker_ids$gene_id)), ]    
     marker_ids$Gene_ID <- as.character(marker_ids$gene_id)
     marker_ids$synonym <- as.character(marker_ids$acronym)
@@ -47,7 +43,7 @@ my_pheatmap <- function(marker_ids = markers,
     }
     
     if( is.null(c_order) == FALSE) {
-                agg_mat2 <- agg_mat2[, c_order]
+        agg_mat2 <- agg_mat2[, c_order]
     }
     
     pheatmap::pheatmap(agg_mat2,
@@ -81,26 +77,49 @@ cds <- readRDS("rds_files/batched_integrated_clustered_complete_dataset.rds")
                    cell_size = 0.6,
                    group_label_size = 9) )
 
-markers <- suppressMessages( 
+seurat_obj <- readRDS("rds_files/seurat_formated_whole_dataset.rds")
+
+markers_all <- suppressMessages( 
     vroom("selected_markers/including_annot_all_markers_of_interest_selected.tsv",
           delim = "\t",
           col_names = T,
           na = "NA") )
 
-( p1 <- my_pheatmap( marker_ids = markers,
-                     c_order = c(
-                         1, 3, 14, 22, # Epidermis / Root hair
-                         12, # Root hair
-                         15, 29, # Lateral root
-                         26, # Xylem
-                         10, 23, # Stele
-                         18, # Cell division vasculature
-                         8, # Pericycle
-                         7, 24, # Endodermis
-                         2, 4, 9, 11, 13, 16, # Cortex
-                         6, # Nodule
-                         5, 17, 19, 20, 21, 25, 27, 28 # NA
-                     ) ) )
+order_levels = c(
+    2, 4, # Epidermis
+    11, # Root hair
+    21,22, # lateral root
+    17, 19, #   stele xylem
+    5, 18, # Stele
+    13, # Stele Phloem
+    7, # Pericycle
+    16, #vascular bundle
+    14, # Stele cell division
+    8, #Endodermis
+    10, #Endodermis (suberized)
+    1,3, #Cortex
+    6,9,15, # nodule
+    12,20,23,24
+)
+
+seurat_obj@meta.data$seurat_clusters2 <- base::factor(x = seurat_obj@meta.data$seurat_clusters, levels = order_levels )
+
+( dotp <- Seurat::DotPlot(seurat_obj,
+                          dot.scale = 6,
+                          features = rev(markers_all$gene_id),
+                          cluster.idents = F,
+                          cols = c("Darkblue", "red"),
+                          group.by = "seurat_clusters2",
+                          assay = "RNA") +
+        scale_x_discrete(position = "top") +
+        xlab("")+
+        ylab("") +
+        ggtitle("") +
+        theme( axis.text.y = element_text(size = rel(1)) ) +
+        coord_flip() )
+
+( p1 <- my_pheatmap( marker_ids = markers_all,
+                     c_order = order_levels) )
 
 ggplot2::ggsave("images/heatmap_of_selected_markers_for_cluster_annotation.png",
                 p1,
