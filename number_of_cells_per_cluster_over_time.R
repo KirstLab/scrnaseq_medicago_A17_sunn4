@@ -6,10 +6,8 @@ number_of_cells_per_cluster_over_time.R -h | --help  show this message.
 
 set.seed(1407)
 
-outfile <- "logs/number_of_cells_per_cluster_over_time.out" # File name of output log
-#Check its existence
+outfile <- "logs/number_of_cells_per_cluster_over_time.out"
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
@@ -22,6 +20,7 @@ suppressMessages( require(tidyverse) )
 suppressMessages( require(monocle3) )
 
 opts <- docopt(doc)
+
 cds <- readRDS(opts$rds)
 colData( cds )$cluster <- monocle3::clusters( cds )
 
@@ -30,6 +29,7 @@ cds_meta <- as.data.frame( colData( cds ) )
 counts_per_cluster <- cds_meta %>% 
     dplyr::count(cluster, Group, timepoint)
 
+system( paste0( "mkdir -p ", opts$prefix) )
 write_excel_csv(counts_per_cluster,
                 file = paste0( opts$prefix, "/",
                               "raw_number_of_cells_per_cluster_by_genotype_and_timepoint.csv") )
@@ -127,8 +127,6 @@ write.table(counts_per_cluster_wide,
             quote = F,
             sep = ",")
 
-## After normalizing the number of cells 
-### For each cluster and genotype, the counts on each time is divided by the total of cells of that genotype in the timepoint. Then the normalized value id multiplied by 1000 to create the counts per thousand metric.
 WT <- counts_per_cluster%>%
     dplyr::filter(Group == "A17-WT")
 WT_G <- counts_per_group%>%
