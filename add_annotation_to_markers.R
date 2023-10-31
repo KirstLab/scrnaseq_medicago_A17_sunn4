@@ -1,25 +1,23 @@
-"Usage: add_annotation_to_markers.R (--dir <dir>)
---dir    Directory containing the files (CSV format) to be annotated. Each file must have the gene IDs on the first column.
+"Usage: add_annotation_to_markers.R (--dir <dir>) (--log_name <log>)
+--dir   Directory containing the files (CSV format) to be annotated. Each file must have the gene IDs on the first column.
+--log_name  Name for the log file.
 add_annotation_to_markers.R -h | --help  show this message.
 " -> doc
 
 set.seed(1407)
 
-outfile <- "logs/add_annotation_to_markers.out" # File name of output log
-#Check its existence
+suppressMessages( require(docopt) )
+suppressMessages( require(vroom) )
+opts <- docopt(doc)
+
+outfile <- paste0("logs/", opts$log)
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
 my_log <- file(outfile) 
 sink(my_log, append = TRUE, type = "output")
 sink(my_log, append = TRUE, type = "message")
-
-suppressMessages( require(docopt) )
-suppressMessages( require(vroom) )
-
-opts <- docopt(doc)
 
 folder_containing_markers <- paste0(
     opts$dir,
