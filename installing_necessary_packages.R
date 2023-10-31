@@ -1,46 +1,42 @@
-## Packages from CRAN
-install.packages("assertthat")
-install.packages("circlize")
+# Packages from CRAN
 install.packages("cowplot")
-install.packages("docopt")
 install.packages("dplyr")
-install.packages("dynfeature")
-install.packages("dynplot")
-install.packages("dynutils")
-install.packages("dynwrap")
+install.packages("tidyr")
 install.packages("ggplot2")
-install.packages("ggthemes")
-install.packages("RColorBrewer")
-install.packages("scales")
-install.packages("Seurat")
-install.packages("stringr")
 install.packages("tidyverse")
-install.packages("viridis")
+install.packages("tidyverse")
 install.packages("vroom")
+install.packages("docopt")
+install.packages("viridis")
+install.packages("circlize")
+install.packages("scales")
+install.packages("dynutils")
+install.packages("RColorBrewer")
+install.packages("pheatmap")
+install.packages("stringr")
+install.packages("Seurat")
+install.packages("Matrix")
+install.packages("paletteer")
+install.packages("animation")
 
-## Packages from Bioconductor
+# Packages from Bioconductor
 if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+     install.packages("BiocManager")
 
+BiocManager::install("scDblFinder")
+BiocManager::install("DropletUtils")
+BiocManager::install("scuttle")
+BiocManager::install("scater")
+BiocManager::install("BiocParallel")
 BiocManager::install("ComplexHeatmap")
+BiocManager::install("WGCNA")
+BiocManager::install("SingleCellExperiment")
+BiocManager::install("slingshot")
+BiocManager::install("tradeSeq")
 
-## Required for monocle3
-BiocManager::install( c(
-    'BiocGenerics',
-    'batchelor',
-    'DelayedArray',
-    'DelayedMatrixStats',
-    'limma',
-    'Matrix.utils',
-    'S4Vectors',
-    'SingleCellExperiment',
-    'SummarizedExperiment',
-    "slingshot",
-    "tradeSeq"
-))
-
-## Packages from devtools
-install.packages("devtools")
-devtools::install_github('cole-trapnell-lab/leidenbase')
-devtools::install_github('cole-trapnell-lab/monocle3')
-devtools::install_github('dynverse/dyno')
+# Packages from GitHub
+install_github("cole-trapnell-lab/monocle3")
+install_github("smorabit/hdWGCNA")
+install_github("thomasp85/patchwork")
+install_github("satijalab/seurat-wrappers")
+install_github("velocyto-team/velocyto.R")
