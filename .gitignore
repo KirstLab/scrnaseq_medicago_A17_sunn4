@@ -7,7 +7,7 @@ rds_files/*
 logs/*
 Rplots.pdf
 RECLUSTERING/*
-mt_whole_dataset_pearson/*
+hdWGCNA_whole_dataset_pearson/*
 .Rhistory
 *.tsv
 *.out
@@ -16,3 +16,5 @@ mt_whole_dataset_pearson/*
 *.svg
 velocity/*
 medicago_GIFs/*
+.Rproj.user
+number_of_cells_per_cluster/
