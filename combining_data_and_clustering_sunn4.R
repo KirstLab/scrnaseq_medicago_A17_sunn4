@@ -1,15 +1,24 @@
-"Usage: step1_integrating_data_and_clustering_sunn4_only.R (--cores <cores>) (--UMI <umi>) (--out=<out>)
+"Usage: combining_data_and_clustering_sunn4.R (--cores <cores>) (--UMI <umi>) (--out=<out>)
 --cores=<cores> Number of cores [default:4].
 --UMI <umi> Minimim UMI for a cell to be included [default:400].
 --out=<out> Output prefix to the rds files [default:cds].
-step1_integrating_data_and_clustering_sunn4_only.R -h | --help  show this message.
+combining_data_and_clustering_sunn4.R -h | --help  show this message.
 " -> doc
 
-# retrieve the command-line arguments
+set.seed(1407)
+
+outfile <- "logs/combining_data_and_clustering_sunn4.out"
+if ( file.exists(outfile) ) {
+    file.remove(outfile)
+}
+
+my_log <- file(outfile)
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 opts <- docopt(doc)
 
-set.seed(1407)
 suppressMessages( require(monocle3) )
 suppressMessages( require(vroom) )
 suppressMessages( require(cowplot) )
@@ -19,14 +28,11 @@ suppressMessages( require(dplyr) )
 threads <- as.numeric( opts$cores )
 umi_theshold = as.numeric( opts$UMI )
 
-cds_sunn_0h <- monocle3::load_cellranger_data("data/Sunn_sep_2022_0h_10k/",
-                                              umi_cutoff = umi_theshold)
-cds_sunn_24h <- monocle3::load_cellranger_data("data/Sunn_sep_2022_24h_10k/",
-                                               umi_cutoff = umi_theshold)
-cds_sunn_48h <- monocle3::load_cellranger_data("data/Sunn_sep_2022_48h_10k/",
-                                               umi_cutoff = umi_theshold)
-cds_sunn_96h <- monocle3::load_cellranger_data("data/Sunn_sep_2022_96h_10k/",
-                                               umi_cutoff = umi_theshold)
+## sunn-4
+cds_sunn_0h <- readRDS("rds_files/sunn_0h_after_scDblFinder.rds")
+cds_sunn_24h <- readRDS("rds_files/sunn_24h_after_scDblFinder.rds")
+cds_sunn_48h <- readRDS("rds_files/sunn_48h_after_scDblFinder.rds")
+cds_sunn_96h <- readRDS("rds_files/sunn_96h_after_scDblFinder.rds")
 
 colData(cds_sunn_0h)$timepoint <- "0h"
 colData(cds_sunn_24h)$timepoint <- "24h"
@@ -148,3 +154,5 @@ ggplot2::ggsave(filename = paste0("images/clusteres_by_time_and_genotype",
                 width=50,
                 units="cm",
                 bg = "#FFFFFF")
+
+closeAllConnections()
