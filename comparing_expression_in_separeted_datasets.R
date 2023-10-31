@@ -1,5 +1,14 @@
 set.seed(1407)
 
+outfile <- "logs/comparing_expression_in_separeted_datasets.out"
+if ( file.exists(outfile) ) {
+    file.remove(outfile)
+}
+
+my_log <- file(outfile)
+sink(my_log, append = TRUE, type = "output")
+sink(my_log, append = TRUE, type = "message")
+
 suppressMessages( require(docopt) )
 suppressMessages( require(vroom) )
 suppressMessages( require(tidyverse) )
@@ -70,7 +79,7 @@ my_UMAP <- function(gene_name = gene_name,
         rel_heights = c(0.1, 1)
     ) 
     
-    ggplot2::ggsave(filename = paste0("comparing_expression_datasets/",
+    ggplot2::ggsave(filename = paste0("images/comparing_expression_datasets/",
                                       gene_name,
                                       "-",
                                       common_name,
@@ -121,7 +130,7 @@ my_UMAP2 <- function() {
                                      rel_widths = c(1, 1)) 
     
     ggplot2::ggsave(
-        filename = paste0("comparing_expression_datasets/A17_sunn-4_comparison.svg"),
+        filename = paste0("images/comparing_expression_datasets/A17_sunn-4_comparison.svg"),
         p_combined,
         height=12,
         width=32,
@@ -132,7 +141,7 @@ my_UMAP2 <- function() {
     p_combined
 } 
 
-system("mkdir -p comparing_expression_datasets/")
+system("mkdir -p images/comparing_expression_datasets/")
 
 for ( i in 1:nrow( markers ) ) {
     
