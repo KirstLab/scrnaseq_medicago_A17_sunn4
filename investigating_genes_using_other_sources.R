@@ -1,4 +1,5 @@
-"Usage: investigating_genes_using_other_sources.R (--out_images <out_imag>) [--markers_file <markers_file>] [--markers_dir <markers_dir>] [--color_scheme=<color_scheme>] [--plot_name <p_name>] [--show_gene_names=<gene_names>] [--image_format=<img_f>]
+"Usage: investigating_genes_using_other_sources.R (--rds <rds>) (--out_images <out_imag>) [--markers_file <markers_file>] [--markers_dir <markers_dir>] [--color_scheme=<color_scheme>] [--plot_name <p_name>] [--show_gene_names=<gene_names>] [--image_format=<img_f>]
+--rds   rds file
 --out_images <out_imag> Output directory where the images will be saved.
 --markers_file <markers_file>   File containing the list of markers to be used, must be in the csv format and have the gene IDs in the first column. Use EITHER \"--markers_file\" OR \"--markers_dir\" [default: NULL].
 --markers_dir <markers_dir> Folder containing the files that should be processed. Each file must be in the csv format and have the gene IDs in the first column. Use EITHER \"--markers_file\" OR \"--markers_dir\" [default: NULL].
