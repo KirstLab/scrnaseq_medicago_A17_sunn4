@@ -17,7 +17,7 @@ suppressMessages( require(monocle3) )
 suppressMessages( require(animation) )
 
 # Reads the RDS file with the clustered data
-cds <- readRDS("RECLUSTERING/CORTEX_NOD_sunn4_all_clusters_but_CN5/rds_file_subset/medicago_integrated_subset_cortex_nodule.rds")
+cds <- readRDS("RECLUSTERING/CORTEX_NOD/rds_file_subset/cortex_nod_selected_clusters_RECLUSTERED.rds")
 
 colData(cds)$Group <- ifelse(colData(cds)$Group == "A17-WT", "A17", "sunn-4")
 
@@ -36,8 +36,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                    cell_size = 1.1,
                    scale_to_range = F)+ 
         ggtitle("0h") + 
-        xlim(-10, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -58,9 +56,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("24h") +
-        xlim(-6, 8) +
-        xlim(-10, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -81,8 +76,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("48h") + 
-        xlim(-10, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -103,8 +96,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("96h") + 
-        xlim(-10, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
