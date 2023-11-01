@@ -35,7 +35,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                    cell_size = 0.7,
                    scale_to_range = F)+ 
         ggtitle("0h") + 
-        xlim(-10, 10) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -55,7 +54,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 0.7,
                      scale_to_range = F) + 
         ggtitle("24h") + 
-        xlim(-10, 10) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -75,7 +73,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 0.7,
                      scale_to_range = F) + 
         ggtitle("48h") + 
-        xlim(-10, 10) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -96,7 +93,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 0.7,
                      scale_to_range = F) + 
         ggtitle("96h") + 
-        xlim(-10, 10) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
