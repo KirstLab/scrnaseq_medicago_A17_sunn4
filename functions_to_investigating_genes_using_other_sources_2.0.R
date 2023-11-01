@@ -20,7 +20,7 @@ my_complexheatmap <- function(scaled_data_frame = scaled_data_frame,
     col_fun = circlize::colorRamp2( breaks = seq(0, 1, 0.1),
                                     colors = color_scheme)
     
-    scaled_data_frame <- scaled_data_frame[ c(t_genes), ]
+    scaled_data_frame <- scaled_data_frame[ rownames(scaled_data_frame) %in% t_genes, ]
     
     ComplexHeatmap::Heatmap(scaled_data_frame,
                             border = TRUE,
@@ -167,7 +167,7 @@ LCM_func_v5 <- function(genes_names = genes_names,
         
     } else if (show_names == FALSE) {
         
-        plots_height <-  0.03 * nrow(LCM_0h) 
+        plots_height <-  0.02 * nrow(LCM_0h) 
         
     }
     
@@ -235,7 +235,7 @@ sc_cluster <- function(genes_names = genes_names,
         
     } else if (show_names == FALSE) {
         
-        plots_height <-  0.03 * nrow(p_agg) 
+        plots_height <-  0.02 * nrow(p_agg) 
         
     }
     
