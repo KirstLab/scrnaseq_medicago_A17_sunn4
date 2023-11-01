@@ -1,0 +1,52 @@
+gene_id	ref. ID	cell_type	Common name	acronym	Reference
+MtrunA17Chr1g0167741	AT5G43350	Epidermis	phosphate transporter	MtPT1	https://doi.org/10.1016/j.molp.2019.04.004
+MtrunA17Chr5g0442871	--	Epidermis	SAUR1 Small Auxin Upregulated RNA	MtSAUR1	https://doi.org/10.1105/tpc.114.133496
+MtrunA17Chr2g0300711	Root_cap_Atrichoblast	Epidermis	Putative protein kinase RLK-Pelle-RLCK-VIIa-2 family	MtrunA17Chr2g0300711	Cervantes et al 2022
+MtrunA17Chr1g0152651	AT4G33880	Root hair	"ROOT HAIR DEFECTIVE 6-LIKE 2, RSL2"	MtrunA17Chr1g0152651 (AtRSL2)	
+MtrunA17Chr7g0238371	--	Root hair	RESPIRATORY BURST OXIDASE HOMOLOG F	MtRbohF	
+MtrunA17Chr2g0296621	**	Root hair	peroxidase	MtPrx100	Cervantes et al 2022
+MtrunA17Chr2g0332971	--	Lateral root	--	MtrunA17Chr2g0332971	https://doi.org/10.1016/j.cub.2019.09.005
+MtrunA17Chr4g0020041	--	Lateral root	--	MtCYP71D436	https://doi.org/10.1016/j.cub.2019.09.005
+MtrunA17Chr4g0029271	--	Lateral root	Root Cap 7	MtRC7	https://doi.org/10.1016/j.cub.2019.09.005
+MtrunA17Chr2g0319311	PtGAUT12	Xylem	GAUT12	MtrunA17Chr2g0319311 (PtGAUT12)	https://biotechnologyforbiofuels.biomedcentral.com/articles/10.1186/s13068-015-0218-y
+MtrunA17Chr7g0219931	AT5G15630	Xylem	AtCobl4	MtrunA17Chr7g0219931 (AtCOBL4)	https://academic.oup.com/plcell/article/27/10/2709/6096592
+MtrunA17Chr4g0028931	**	Xylem	Putative sugar phosphate transporter domain-containing protein	MtrunA17Chr4g0028931	Cervantes et al 2022
+MtrunA17Chr5g0401131	--	Stele	MtSHR1	MtSHR1	
+MtrunA17Chr4g0054071	--	Stele	MtSHR2	MtSHR2	
+MtrunA17Chr8g0361501	AT3G20640 	Stele	"PERICYCLE FACTOR TYPE-A 6, PFA6"	MtrunA17Chr8g0361501 (AtPFA6)	
+MtrunA17Chr2g0319211	**	Phloem	"Putative alpha crystallin/Hsp20 domain, HSP20-like chaperone"	MtrunA17Chr2g0319211	Cervantes et al 2022
+MtrunA17Chr4g0037011	**	Phloem	"Putative ubiquitin-conjugating enzyme E2, ubiquitin-conjugating enzyme/RWD"	MtrunA17Chr4g0037011	Cervantes et al 2022
+MtrunA17Chr5g0415341	**	Phloem	"Putative wall-associated receptor kinase, galacturonan-binding domain-containing protein"	MtrunA17Chr5g0415341	Cervantes et al 2022
+MtrunA17Chr2g0325961	AT3G45700	Pericycle	AT3G45700	MtNPF2.2	
+MtrunA17Chr1g0166651		Pericycle	MtPHO1.1	MtPHO1.1	
+MtrunA17Chr5g0400371		Pericycle	AT1G32450	MtNPF7.9	
+MtrunA17Chr7g0214181		Vascular_bundle	TML2	MtTML2	
+MtrunA17Chr1g0185751		Vascular_bundle	IPT3	MtIPT3	
+MtrunA17Chr6g0485621		Vascular_bundle	YUCCA 2	MtYUCCA2	
+MtrunA17Chr3g0125051	AT1G44110	Cell division in vasculature	Cyclin A type (rhizobium-induced)	MtCycA1-1	
+MtrunA17Chr5g0441371	AT2G26760	Cell division in vasculature	Cyclin B type (rhizobium-induced)	MtCycB1-2	
+MtrunA17Chr8g0370671	AT1G20610	Cell division in vasculature	Cyclin B type (rhizobium-induced)	MtCycB2-2	
+MtrunA17Chr2g0322861		Endodermis	AT1G05260	MtPrx05	
+MtrunA17Chr4g0036981		Endodermis	kinase with adenine nucleotide alpha hydrolases-like domain-containing protein	MtrunA17Chr4g0036981 (AT2G16750)	
+MtrunA17Chr7g0245601		Endodermis	MtSCR	MtSCR	
+MtrunA17Chr5g0429651	**	Suberized_endodermal_cells	Cytochrome P450 monooxygenase	MtCYP86A23	Cervantes et al 2022
+MtrunA17Chr3g0115821	**	Suberized_endodermal_cells	Myeloblastosis (MYB) transcription factor 106	MtMYB106	Cervantes et al 2022
+MtrunA17Chr8g0381001	**	Suberized_endodermal_cells	Putative casparian strip membrane protein	MtrunA17Chr8g0381001	Cervantes et al 2022
+MtrunA17Chr7g0214211		Cortex	Glyma.18G300800.1	MtLAT52/POE_12 (Glyma.18G300800.1)	
+MtrunA17Chr7g0224361		Cortex	Glyma.18G300800.1	MtLAT52/POE_11 (Glyma.18G300800.1)	
+MtrunA17Chr4g0046351	**	Cortex	Cytochrome P450 monooxygenase	MtCYP93C20	Liu et al 2023
+MtrunA17Chr1g0171771		Nodule related	MtNOOT2	MtNOOT2	
+MtrunA17Chr1g0177091		Nodule related	MtNF-YA1	MtNF-YA1	
+MtrunA17Chr1g0184911		Nodule related	MtD27 (MtDWARF27)	MtD27 (MtDWARF27)	
+MtrunA17Chr1g0197491		Nodule related	MtRPG	MtRPG	
+MtrunA17Chr2g0328971		Nodule related	PLT1 Plethora 1	MtPLT1	
+MtrunA17Chr3g0081511		Nodule related	MtUMAMIT14	MtN21 (MtUMAMIT14)	
+MtrunA17Chr3g0082981		Nodule related	MtENOD12	MtENOD12	
+MtrunA17Chr3g0082994		Nodule related	MtENOD11	MtENOD11	
+MtrunA17Chr3g0137174		Nodule related	MtEFD2	MtEFD2	
+MtrunA17Chr4g0040951		Nodule related	MtCLE13	MtCLE13	
+MtrunA17Chr5g0412151		Nodule related	PLT3 Plethora 3	MtPLT3	
+MtrunA17Chr5g0423671		Nodule related	MtNCR247	MtNCR247	
+MtrunA17Chr5g0436661		Nodule related	MtWOX5	MtWOX5	
+MtrunA17Chr5g0448621		Nodule related	NIN	MtNIN	
+MtrunA17Chr7g0253424		Nodule related	ERN1	MtERN1	
