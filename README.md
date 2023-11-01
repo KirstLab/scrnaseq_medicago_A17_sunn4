@@ -199,7 +199,6 @@ Rscript subseting_the_network.R
 Note, this step demans a large amoung of RAM memory. We recommend using a cluster with at least 150GB of RAM.
 
 ```sh
-###>>> Still need to be transfer infomation from the server
 sbatch velocyto.sh # run it for each sample
 python combining_loom_files_with_loompy.py
 Rscript seurat_to_anndata_after_velocyto_whole_dataset.R
