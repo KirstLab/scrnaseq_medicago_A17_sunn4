@@ -1,9 +1,8 @@
 set.seed(1407)
 
-outfile <- "logs/reclustering_roothair.out" # File name of output log
-#Check its existence
+outfile <- "logs/reclustering_roothair.out"
+
 if ( file.exists(outfile) ) {
-    #Delete file if it exists
     file.remove(outfile)
 }
 
@@ -23,7 +22,6 @@ suppressMessages( require(stringr) )
 ############################################
 cds <- readRDS("rds_files/batched_integrated_clustered_complete_dataset.rds")
 
-# Where to save the results
 folder_name <- "RECLUSTERING/Epidermis_roothair/"
 
 ( p0 <- plot_cells(cds,
@@ -31,7 +29,7 @@ folder_name <- "RECLUSTERING/Epidermis_roothair/"
                  cell_size = 0.5,
                  group_label_size = 5) )
 
-cluster_number = c(1, 14, 22, 12, 3)
+cluster_number = c(2,4,11)
 
 cells_on_clusters <- cds@clusters$UMAP$clusters
 cells_on_clusters <- cells_on_clusters[cells_on_clusters %in% cluster_number]
@@ -58,21 +56,22 @@ cds_subset <- clear_cds_slots(cds_subset)
 
 cds_subset <- monocle3::preprocess_cds(cds_subset, num_dim = 100, verbose = T)
 cds_subset <- reduce_dimension(cds_subset, verbose = T)
+res <- c(1, 0.1, 0.01, 0.001, 0.0001, 0.00001)
 
 cds_subset <- cluster_cells(cds_subset,
                             verbose = T,
-                            resolution = 1e-03,
+                            resolution = 0.001,
                             random_seed = 1407)
 
 ( p2 <- plot_cells(cds_subset, 
                    group_label_size = 7,
-                   cell_size = 0.75) )
+                   cell_size = 1) )
 
 ( p3 <- plot_cells(cds_subset,
                    group_label_size = 5,
                    trajectory_graph_segment_size = 1.5,
                    graph_label_size = 5,
-                   cell_size = 0.5)  +
+                   cell_size = 0.75)  +
         facet_wrap(~Group + timepoint, nrow = 2) +
         theme(strip.text = element_blank(),
               axis.title = element_text(size = 16),
@@ -106,6 +105,16 @@ ggplot2::ggsave(filename = paste0(folder_name,
 
 ggplot2::ggsave(filename = paste0(folder_name,
                                   "clustering_images",
+                                  "/epidermis_selected_clusters_RECLUSTERED.svg"),
+                p2,
+                height=25,
+                width=40,
+                units="cm",
+                bg = "#FFFFFF",
+                dpi = 300)
+
+ggplot2::ggsave(filename = paste0(folder_name,
+                                  "clustering_images",
                                   "/epidermis_selected_clusters_RECLUSTERED_by_time_and_genotype.png"),
                 p3,
                 height=25,
@@ -132,11 +141,11 @@ marker_test_res <- top_markers(cds_subset,
                                cores = 8,
                                verbose = T)
 
-write.csv( marker_test_res, 
+write.table( marker_test_res, 
            paste0( folder_name, 
                    "top_1000_markers_per_cluster",
-                   "/top_1000_markers_per_cluster.csv"),
-           row.names = F) 
+                   "/top_1000_markers_per_cluster.tsv"),
+           row.names = F, col.names = T, sep = "\t")
 
 filtering_criteria = "specificity"
 
@@ -150,13 +159,13 @@ for (c in unique(marker_test_res$cell_group) ) {
         dplyr::filter(cell_group == c) %>%
         dplyr::arrange( desc(specificity) ) 
     
-    write.csv(top_specific_markers, 
+    write.table(top_specific_markers, 
               paste0(folder_name,
                      "/list_of_top_1000_for_cluster_",
                      c,
                      "_",filtering_criteria,
-                     ".csv"),
-              row.names = F)
+                     ".tsv"),
+              row.names = F, col.names = T, sep = "\t") 
 }
 
 closeAllConnections()
