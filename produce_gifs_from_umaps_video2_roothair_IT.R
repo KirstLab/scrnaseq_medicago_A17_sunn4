@@ -34,10 +34,8 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                    #genes = gene_name,
                    group_label_size = 0,
                    cell_size = 1.1,
-                   scale_to_range = F)+ 
+                   scale_to_range = F) + 
         ggtitle("0h") + 
-        xlim(-6, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -58,8 +56,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("24h") + 
-        xlim(-6, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -80,8 +76,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("48h") + 
-        xlim(-6, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
@@ -102,8 +96,6 @@ cds_subset <- cds[, colnames(cds) %in% cells_on_time_names ]
                      cell_size = 1.1,
                      scale_to_range = F) + 
         ggtitle("96h") +
-        xlim(-6, 10) +
-        ylim(-6, 6) +
         theme(strip.text = element_text(size = 24),
               axis.title = element_text(size = 16),
               axis.text = element_text(size = 16),
