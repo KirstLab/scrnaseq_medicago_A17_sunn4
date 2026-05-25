@@ -175,7 +175,7 @@ generate_heatmaps_by_time(file_name = "RECLUSTERING/PERICYCLE/rds_file_subset/me
                   folder_n = "pericycle_Roy")
 
 markers <- suppressMessages(
-    vroom("/Users/wendellpereira/Desktop/Table_S3_DEGs_across_time.txt",
+    vroom("selected_markers/Table_S3_DEGs_across_time.txt",
           delim = "\t",
           col_names = T,
           na = "NA") )
