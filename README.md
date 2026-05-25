@@ -176,10 +176,6 @@ Rscript visual_inspection_of_markers.R --rds rds_files/batched_integrated_cluste
 Rscript generates_the_heatmap_containing_gene_markers_for_figure1.R
 ```
 
-```sh
-Rscript investigating_genes_using_other_sources_2.0.R --rds rds_files/batched_integrated_clustered_complete_dataset.rds --out_images images/annotation_using_other_sources_images --markers_dir top_1000_markers_per_cluster/by_specificity/top100 --color_scheme VIRIDIS --show_gene_names FALSE --image_format png
-```
-
 ### high-dimension weighted gene co-expression network analysis (hdWGCNA)
 
 Note, this step demans a large amoung of RAM memory. We recommend using a cluster with at least 150GB of RAM.
@@ -200,6 +196,9 @@ Note, this step demans a large amoung of RAM memory. We recommend using a cluste
 
 ```sh
 sbatch velocyto.sh # run it for each sample
+# The per-sample loom files produced by velocyto must be merged into a single
+# combined loom; this is a short user-supplied step that wraps loompy.combine.
+# See https://linnarssonlab.org/loompy/ for the standard pattern.
 python combining_loom_files_with_loompy.py
 Rscript seurat_to_anndata_after_velocyto_whole_dataset.R
 python sc_velo_seurat_obj_whole_dataset_dynamical_model.py
@@ -296,6 +295,7 @@ done
 ```sh
 Rscript trajectory_inference_cortex_nodule.R
 Rscript TradeSeq.R
+```
 
 ## Additional analysis
 
